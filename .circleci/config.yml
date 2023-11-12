@@ -37,6 +37,8 @@ workflows:
     jobs:
       - build
       - deploy:
+          context:
+            - swimhistory
           requires:
             - build
           filters:

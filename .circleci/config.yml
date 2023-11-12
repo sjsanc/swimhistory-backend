@@ -40,6 +40,10 @@ jobs:
           name: Build Docker image
           command: docker build -t $DIGITALOCEAN_REGISTRY:$CIRCLE_PROJECT_REPONAME .
 
+      - run:
+          name: Push image to registry
+          command: docker push $DIGITALOCEAN_REGISTRY:$CIRCLE_PROJECT_REPONAME
+
 workflows:
   build-and-deploy:
     jobs:

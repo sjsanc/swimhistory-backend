@@ -1,0 +1,44 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Page {
+    id         String              @id @default(uuid())
+    title      String
+    content    String
+    categories CategoriesOnPages[]
+    createdAt  DateTime            @default(now())
+    updatedAt  DateTime            @updatedAt
+}
+
+model Category {
+    id        Int                 @id @default(autoincrement())
+    name      String
+    pages     CategoriesOnPages[]
+    createdAt DateTime            @default(now())
+    updatedAt DateTime            @updatedAt
+}
+
+model CategoriesOnPages {
+    page       Page     @relation(fields: [pageId], references: [id])
+    pageId     String
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int
+    assignedAt DateTime @default(now())
+    assignedBy String
+
+    @@id([pageId, categoryId])
+}
+
+model Image {
+    id        String   @id
+    isResized Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

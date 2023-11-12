@@ -1,0 +1,47 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+  build:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      # - run:
+      #     command: yarn test
+      #     name: Run tests
+      - run:
+          command: yarn build
+          name: Build app
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - .
+
+  deploy:
+    docker:
+      - image: docker:stable
+    working_directory: ~/app
+
+    steps:
+      - attach_workspace:
+          at: ~/app
+
+      - run:
+          name: Authenticate with DigitalOcean Container Registry
+          command: echo "$DIGITALOCEAN_REGISTRY_TOKEN" | docker login -u "$DIGITALOCEAN_REGISTRY_USERNAME" --password-stdin $DIGITALOCEAN_REGISTRY_HOST
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build # only deploy once build job has completed
+          filters:
+            branches:
+              only: main # only deploy on the main branch#
+

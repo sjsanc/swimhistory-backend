@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Authenticate with DigitalOcean Container Registry
           # command: docker login -u "$DIGITALOCEAN_REGISTRY_TOKEN" --password-stdin $DIGITALOCEAN_REGISTRY_TOKEN
-          command: echo $DIGITALOCEAN_REGISTRY_TOKEN
+          command: echo ${DIGITALOCEAN_REGISTRY_TOKEN}
 
 workflows:
   build-and-deploy:

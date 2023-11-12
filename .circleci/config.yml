@@ -29,8 +29,7 @@ jobs:
 
       - run:
           name: Authenticate with DigitalOcean Container Registry
-          # command: echo "$DIGITALOCEAN_REGISTRY_TOKEN" | docker login -u "$DIGITALOCEAN_REGISTRY_USERNAME" --password-stdin $DIGITALOCEAN_REGISTRY_HOST
-          command: ls
+          command: docker login -u "$DIGITALOCEAN_REGISTRY_TOKEN" --password-stdin $DIGITALOCEAN_REGISTRY_TOKEN
 
 workflows:
   build-and-deploy:
@@ -38,8 +37,8 @@ workflows:
       - build
       - deploy:
           requires:
-            - build # only deploy once build job has completed
+            - build
           filters:
             branches:
-              only: main # only deploy on the main branch#
+              only: master
 

@@ -6,6 +6,7 @@ orbs:
 jobs:
   build:
     executor: node/default
+    working_directory: ~/project
     steps:
       - checkout
       - node/install-packages:
@@ -21,7 +22,7 @@ jobs:
   deploy:
     docker:
       - image: docker:stable
-    working_directory: .
+    working_directory: ~/project
 
     steps:
       - attach_workspace:
@@ -29,7 +30,7 @@ jobs:
 
       - run:
           name: Authenticate with DigitalOcean Container Registry
-          command: docker login -u "$DIGITALOCEAN_REGISTRY_TOKEN" -p $DIGITALOCEAN_REGISTRY_TOKEN $DIGITALOCEAN_REGISTRY
+          command: docker login -u "$DIGITALOCEAN_REGISTRY_TOKEN" -password-stdin $DIGITALOCEAN_REGISTRY_TOKEN $DIGITALOCEAN_REGISTRY
 
       - run:
           name: Build and push Docker image

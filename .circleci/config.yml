@@ -42,7 +42,7 @@ jobs:
 
       - run:
           name: Push image to registry
-          command: docker push $DIGITALOCEAN_REGISTRY:$CIRCLE_PROJECT_REPONAME
+          command: docker push $DIGITALOCEAN_REGISTRY/$CIRCLE_PROJECT_REPONAME
 
 workflows:
   build-and-deploy:
